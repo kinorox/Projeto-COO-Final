@@ -1,21 +1,24 @@
 package std.ep.game.elements.player;
-import std.ep.game.lib.GameLib;
+import std.ep.game.elements.projectile.*;
 
 public class Player {
 
 	private int state;											// estado (0 inactive - 1 active - 2 exploding)
-	private double xCoord = GameLib.WIDTH / 2;					// coordenada x
-	private double yCoord = GameLib.HEIGHT * 0.90;				// coordenada y
-	private double xVcoord = 0.25;								// velocidade no eixo x
-	private double yVcoord = 0.25;								// velocidade no eixo y
-	private double radius = 12.0;								// raio (tamanho aproximado do player)
+	private double xCoord;										// coordenada x
+	private double yCoord;										// coordenada y
+	private double xVcoord;										// velocidade no eixo x
+	private double yVcoord;										// velocidade no eixo y
+	private double radius;										// raio (tamanho aproximado do player)
 	private double explosionStart;								// instante do início da explosão
 	private double explosionEnd;								// instante do final da explosão
-	private long nextShot;										// instante a partir do qual pode haver um próximo tiro
+	public long nextShot;										// instante a partir do qual pode haver um próximo tiro
+	private Projectile projetil; 
 	
-	public Player(long nextShot) {
+	public Player(long nextShot)
+	{
 		super();
 		this.nextShot = nextShot;
+		this.projetil = new Projectile();
 	}
 	
 	public int getState() {
@@ -24,28 +27,28 @@ public class Player {
 	public void setState(int state) {
 		this.state = state;
 	}
-	public double getxCoord() {
+	public double getX() {
 		return xCoord;
 	}
-	public void setxCoord(double xCoord) {
+	public void setX(double xCoord) {
 		this.xCoord = xCoord;
 	}
-	public double getyCoord() {
+	public double getY() {
 		return yCoord;
 	}
-	public void setyCoord(double yCoord) {
+	public void setY(double yCoord) {
 		this.yCoord = yCoord;
 	}
-	public double getxVcoord() {
+	public double getVeloX() {
 		return xVcoord;
 	}
-	public void setxVcoord(double xVcoord) {
+	public void setVeloX(double xVcoord) {
 		this.xVcoord = xVcoord;
 	}
-	public double getyVcoord() {
+	public double getVeloY() {
 		return yVcoord;
 	}
-	public void setyVcoord(double yVcoord) {
+	public void setVeloY(double yVcoord) {
 		this.yVcoord = yVcoord;
 	}
 	public double getRadius() {
@@ -73,4 +76,8 @@ public class Player {
 		this.nextShot = nextShot;
 	}
 	
+	public Projectile getProjetil()
+	{
+		return this.projetil;
+	}
 }

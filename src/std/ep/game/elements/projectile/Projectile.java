@@ -3,47 +3,58 @@ package std.ep.game.elements.projectile;
 public class Projectile {
 
 	private boolean active;
-	private double xCoord; // coordenadas x
-	private double yCoord; // coordenadas y
-	private double xVcoord; // velocidade no eixo x
-	private double yVcoord; // velocidade no eixo y
+	private double X; // coordenadas x
+	private double Y; // coordenadas y
+	private double VelocidadeX; // velocidade no eixo x
+	private double VelocidadeY; // velocidade no eixo y
 	private double radius; // raio (tamanho dos projéteis inimigos)
+	
+	public Projectile()
+	{
+		this.active  = true;
+		this.X  = 0.0;
+		this.Y  = 0.0;
+		this.VelocidadeX = 0.0;
+		this.VelocidadeY = 0.0;
+		this.radius  = 0.0;
+	}
+	
 	
 	public Projectile(double radius) {
 		super();
 		this.radius = radius;
 	}
 
-	public double getxCoord() {
-		return xCoord;
+	public double getX() {
+		return X;
 	}
 
-	public void setxCoord(double xCoord) {
-		this.xCoord = xCoord;
+	public void setX(double xCoord) {
+		this.X = xCoord;
 	}
 
-	public double getyCoord() {
-		return yCoord;
+	public double getY() {
+		return Y;
 	}
 
-	public void setyCoord(double yCoord) {
-		this.yCoord = yCoord;
+	public void setY(double yCoord) {
+		this.Y = yCoord;
 	}
 
-	public double getxVcoord() {
-		return xVcoord;
+	public double getVeloX() {
+		return VelocidadeX;
 	}
 
-	public void setxVcoord(double xVcoord) {
-		this.xVcoord = xVcoord;
+	public void setVeloX(double xVcoord) {
+		this.VelocidadeX = xVcoord;
 	}
 
-	public double getyVcoord() {
-		return yVcoord;
+	public double setVeloY() {
+		return VelocidadeY;
 	}
 
-	public void setyVcoord(double yVcoord) {
-		this.yVcoord = yVcoord;
+	public void setVeloY(double yVcoord) {
+		this.VelocidadeY = yVcoord;
 	}
 
 	public double getRadius() {

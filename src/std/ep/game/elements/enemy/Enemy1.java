@@ -1,8 +1,7 @@
 package std.ep.game.elements.enemy;
 
-public class Enemy1 extends Enemy{
-	
-	double radius = 9.0;    // raio (tamanho do inimigo 1)
+public class Enemy1 extends Enemy
+{
 	long nextShoot;			// instantes do próximo tiro
 	long nextEnemy;			// instante em que um novo inimigo 1 deve aparecer								
 	

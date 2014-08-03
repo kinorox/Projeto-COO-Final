@@ -17,8 +17,6 @@ public class ElementsFacade {
 	private ArrayList<Enemy> enemy3;
 	private ArrayList<Background> primaryBG;
 	private ArrayList<Background> secondaryBG;
-	private ArrayList<Projectile> e_projectile;
-	private ArrayList<Projectile> projectile;
 	private Player p;
 	
 	public void initializeElements(){
@@ -29,9 +27,7 @@ public class ElementsFacade {
 		//inicializacao
 		Player p = new Player(currentTime);
 		p.setState(1); //active
-		
-		projectile = initializeProjectile(10, 1.0);
-		e_projectile = initializeProjectile(200, 2.0);
+
 		enemy1 = initializeEnemy();
 		enemy2 = initializeEnemy();
 		primaryBG = initializeBackground(20, 0.070);
@@ -39,19 +35,6 @@ public class ElementsFacade {
 		
 		GameLib.initGraphics();
 		
-	}
-	
-	private ArrayList<Projectile> initializeProjectile(int size, double radius){
-		ArrayList<Projectile> p = new ArrayList<>(size);
-		
-		for(int i = 0; i<=size; i++){
-			Projectile pj = new Projectile(radius);
-			pj.setActive(false);
-			
-			p.add(pj);
-		}
-		
-		return p;
 	}
 
 	private ArrayList<Background> initializeBackground(int size, double speed) {
@@ -103,14 +86,6 @@ public class ElementsFacade {
 
 	public ArrayList<Background> getSecondaryBG() {
 		return secondaryBG;
-	}
-
-	public ArrayList<Projectile> getE_projectile() {
-		return e_projectile;
-	}
-
-	public ArrayList<Projectile> getProjectile() {
-		return projectile;
 	}
 
 	public Player getP() {

@@ -1,5 +1,5 @@
 package std.ep.game.elements.enemy;
-
+import std.ep.game.elements.projectile.*;
 import std.ep.game.lib.GameLib;
 
 public abstract class Enemy {	
@@ -12,8 +12,13 @@ public abstract class Enemy {
 	private double rv;						// velocidades de rotação
 	private double explosionStart;			// instantes dos inícios das explosões
 	private double explosionEnd;			// instantes dos finais das explosões
+	private double radius;
+	private Projectile projetil;
 	
-	public Enemy() {}
+	public Enemy()
+	{
+		projetil = new Projectile();
+	}
 
 	public int getStates() {
 		return states;
@@ -23,27 +28,27 @@ public abstract class Enemy {
 		this.states = states;
 	}
 
-	public double getxCoord() {
+	public double getX() {
 		return xCoord;
 	}
 
-	public void setxCoord(double xCoord) {
+	public void setX(double xCoord) {
 		this.xCoord = xCoord;
 	}
 
-	public double getyCoord() {
+	public double getY() {
 		return yCoord;
 	}
 
-	public void setyCoord(double yCoord) {
+	public void setY(double yCoord) {
 		this.yCoord = yCoord;
 	}
 
-	public double getxVCoord() {
+	public double getVelocidade() {
 		return xVCoord;
 	}
 
-	public void setxVCoord(double xVCoord) {
+	public void setVelocidade(double xVCoord) {
 		this.xVCoord = xVCoord;
 	}
 
@@ -77,6 +82,20 @@ public abstract class Enemy {
 
 	public void setExplosionEnd(double explosionEnd) {
 		this.explosionEnd = explosionEnd;
+	}
+	
+	public Projectile getProjetil() {
+		return projetil;
+	}
+	
+	public void setRadius(double rad)
+	{
+		this.radius = rad;
+	}
+	
+	public double getRadius()
+	{
+		return this.radius;
 	}
 		
 }

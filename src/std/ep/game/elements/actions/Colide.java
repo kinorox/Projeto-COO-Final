@@ -1,14 +1,14 @@
 package std.ep.game.elements.actions;
 import java.util.ArrayList;
-
+import std.ep.game.elements.actions.states.*;
 import std.ep.game.elements.enemy.Enemy;
 import std.ep.game.elements.player.Player;
 
 public class Colide 
 {
-	
-	private Integer ACTIVE = 1;
-	private Integer EXPLODING = 2;
+
+	private State EXPLODING = new Exploding();
+	private State ACTIVE = new Active();
 	
 	public ArrayList<Enemy> enemyColisionWithPlayerProjectile(Player p, ArrayList<Enemy> e)
 	{
@@ -17,7 +17,7 @@ public class Colide
 		
 		for(Enemy a : e)
 		{
-			if(a.getStates() == ACTIVE)
+			if(a.getStates().equals(ACTIVE))
 			{	
 				double dx = a.getX() - p.getProjetil().getX();
 				double dy = a.getY() - p.getProjetil().getY();
@@ -25,7 +25,7 @@ public class Colide
 				
 				if(dist < a.getRadius())
 				{	
-					a.setStates(EXPLODING);
+					EXPLODING.setState(a);
 					a.setExplosionStart(p.getNextShot());
 					a.setExplosionEnd(p.getNextShot() + 500);
 					
@@ -47,7 +47,7 @@ public class Colide
 			
 			if(dist < (p.getRadius() + a.getRadius()) * 0.8)
 			{	
-				p.setState(EXPLODING);
+				EXPLODING.setState(p);
 				p.setExplosionStart(p.getNextShot());
 				p.setExplosionEnd(p.getNextShot() + 2000);
 				
@@ -60,7 +60,7 @@ public class Colide
 	
 	public Player playerColisionWithEnemyProjectile(Player p, ArrayList<Enemy> e)
 	{
-		if(p.getState() == ACTIVE)
+		if(p.getState().equals(ACTIVE))
 		{		
 			for(Enemy a: e)
 			{
@@ -70,7 +70,7 @@ public class Colide
 				
 				if(dist < (p.getRadius() + a.getProjetil().getRadius()) * 0.8)
 				{		
-					p.setState(EXPLODING);
+					EXPLODING.setState(p);
 					p.setExplosionStart(p.getNextShot()); //NextShot armazena o valor de currentTime
 					p.setExplosionEnd(p.getNextShot() + 2000);
 				}

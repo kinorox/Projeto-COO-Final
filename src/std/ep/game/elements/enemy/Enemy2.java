@@ -1,5 +1,4 @@
 package std.ep.game.elements.enemy;
-import std.ep.game.lib.GameLib;
 
 public class Enemy2 extends Enemy 
 {

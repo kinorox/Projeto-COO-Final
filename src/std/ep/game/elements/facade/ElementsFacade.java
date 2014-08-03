@@ -2,6 +2,9 @@ package std.ep.game.elements.facade;
 
 import java.util.ArrayList;
 
+import std.ep.game.elements.actions.states.Active;
+import std.ep.game.elements.actions.states.Exploding;
+import std.ep.game.elements.actions.states.State;
 import std.ep.game.elements.background.Background;
 import std.ep.game.elements.enemy.Enemy;
 import std.ep.game.elements.enemy.Enemy1;
@@ -19,13 +22,21 @@ public class ElementsFacade {
 	private ArrayList<Background> secondaryBG;
 	private Player p;
 	
-	public void initializeElements(){
+	private State EXPLODING = new Exploding();
+	private State ACTIVE = new Active();
+	private State INACTIVE = new Active();
+	
+	private long currentTime;
+	
+	public ElementsFacade(long currentTime) {
+		this.currentTime = currentTime;
+	}
 
-		long currentTime = System.currentTimeMillis();
+	public void initializeElements(){
 		
 		//inicializacao
 		Player p = new Player(currentTime);
-		p.setState(1); //active
+		ACTIVE.setState(p);
 
 		enemy1 = initializeEnemy();
 		enemy2 = initializeEnemy();
@@ -55,7 +66,7 @@ public class ElementsFacade {
 		
 		for(int i = 0; i<=10; i++) {
 			Enemy e = new Enemy1(System.currentTimeMillis());
-			e.setStates(0); //inactive
+			INACTIVE.setState(e);
 			en.add(e);
 		}
 		

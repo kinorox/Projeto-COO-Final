@@ -1,9 +1,12 @@
 package std.ep.game.elements.player;
-import std.ep.game.elements.projectil.*;
+import java.util.ArrayList;
 
+import std.ep.game.elements.projectil.*;
+import std.ep.game.elements.actions.*;
+import std.ep.game.elements.actions.states.State;
 public class Player {
 
-	private int state;											// estado (0 inactive - 1 active - 2 exploding)
+	private State state;
 	private double xCoord;										// coordenada x
 	private double yCoord;										// coordenada y
 	private double xVcoord;										// velocidade no eixo x
@@ -12,19 +15,23 @@ public class Player {
 	private double explosionStart;								// instante do início da explosão
 	private double explosionEnd;								// instante do final da explosão
 	public long nextShot;										// instante a partir do qual pode haver um próximo tiro
-	private Projectil projetil; 
+	private ArrayList<Projectil> projetil; 
 	
+	public void setProjetil(ArrayList<Projectil> projetil) {
+		this.projetil = projetil;
+	}
+
 	public Player(long nextShot)
 	{
 		super();
 		this.nextShot = nextShot;
-		this.projetil = new Projectil();
+		this.projetil = new ArrayList<Projectil>();
 	}
 	
-	public int getState() {
+	public State getState() {
 		return state;
 	}
-	public void setState(int state) {
+	public void setState(State state) {
 		this.state = state;
 	}
 	public double getX() {
@@ -76,7 +83,7 @@ public class Player {
 		this.nextShot = nextShot;
 	}
 	
-	public Projectil getProjetil()
+	public ArrayList<Projectil> getProjetil()
 	{
 		return this.projetil;
 	}

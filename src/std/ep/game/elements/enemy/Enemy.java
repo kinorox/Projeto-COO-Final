@@ -1,10 +1,14 @@
 package std.ep.game.elements.enemy;
+import java.util.ArrayList;
+
+import std.ep.game.elements.actions.*;
+import std.ep.game.elements.actions.states.State;
 import std.ep.game.elements.projectil.*;
 import std.ep.game.lib.GameLib;
 
 public abstract class Enemy {	
 	
-	private int states;						// estados (0=inativo - 1=ativo - 2=explodindo)
+	private State state;						// estados (0=inativo - 1=ativo - 2=explodindo)
 	private double xCoord;					// coordenadas x
 	private double yCoord;					// coordenadas y
 	private double xVCoord;					// velocidades
@@ -13,19 +17,19 @@ public abstract class Enemy {
 	private double explosionStart;			// instantes dos inícios das explosões
 	private double explosionEnd;			// instantes dos finais das explosões
 	private double radius;
-	private Projectil projetil;
+	private ArrayList<Projectil> projetil; 
 	
 	public Enemy()
 	{
-		projetil = new Projectil();
+		this.projetil = new ArrayList<Projectil>();
 	}
 
-	public int getStates() {
-		return states;
+	public State getStates() {
+		return state;
 	}
 
-	public void setStates(int states) {
-		this.states = states;
+	public void setStates(State instancia) {
+		this.state = instancia;
 	}
 
 	public double getX() {
@@ -84,8 +88,12 @@ public abstract class Enemy {
 		this.explosionEnd = explosionEnd;
 	}
 	
-	public Projectil getProjetil() {
+	public ArrayList<Projectil> getProjetil() {
 		return projetil;
+	}
+	
+	public void setProjetil(ArrayList<Projectil> projetil) {
+		this.projetil = projetil;
 	}
 	
 	public void setRadius(double rad)

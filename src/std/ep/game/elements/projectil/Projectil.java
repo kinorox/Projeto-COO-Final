@@ -1,8 +1,11 @@
 package std.ep.game.elements.projectil;
 
+import std.ep.game.elements.actions.states.Inactive;
+import std.ep.game.elements.actions.states.State;
+
 public class Projectil {
 
-	private boolean active;
+	private State state;
 	private double X; // coordenadas x
 	private double Y; // coordenadas y
 	private double VelocidadeX; // velocidade no eixo x
@@ -11,7 +14,7 @@ public class Projectil {
 	
 	public Projectil()
 	{
-		this.active  = true;
+		this.state  = new Inactive();
 		this.X  = 0.0;
 		this.Y  = 0.0;
 		this.VelocidadeX = 0.0;
@@ -49,7 +52,7 @@ public class Projectil {
 		this.VelocidadeX = xVcoord;
 	}
 
-	public double setVeloY() {
+	public double getVeloY() {
 		return VelocidadeY;
 	}
 
@@ -65,12 +68,12 @@ public class Projectil {
 		this.radius = radius;
 	}
 
-	public boolean getActive() {
-		return active;
+	public State getState() {
+		return state;
 	}
 
-	public void setActive(boolean active) {
-		this.active = active;
+	public void setState(State instancia) {
+		this.state = instancia;
 	}
 					
 }

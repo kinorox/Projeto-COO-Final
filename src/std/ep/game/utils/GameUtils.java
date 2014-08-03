@@ -9,20 +9,16 @@ import std.ep.game.elements.projectil.Projectil;
 import std.ep.game.lib.GameLib;
 
 public class GameUtils {
-
-	private static State INACTIVE = new Inactive();
-	private static State ACTIVE = new Active();
-	private static State EXPLODING = new Exploding();
 	
 	/* Encontra e devolve o primeiro índice do  */
 	/* array referente a uma posição "inativa". */
 	
-	public Integer findFreeIndex(ArrayList<Enemy> stateArray){
+	public static Integer findFreeIndex(ArrayList<Projectil> stateArray){
 		
 		Integer i = 0;
 		
-		for (Enemy a : stateArray) {	
-			if(a.getStates().equals(INACTIVE)) break;
+		for (Projectil a : stateArray) {	
+			if(a.getState().equals(Inactive.instancia)) break;
 			i++;
 		}
 		
@@ -53,14 +49,14 @@ public class GameUtils {
 //		return freeArray;
 //	}
 	
-	public ArrayList<Projectil> checkProjectil(Player p, double delta){
+	public static ArrayList<Projectil> checkProjectil(Player p, double delta){
 		ArrayList<Projectil> pr = p.getProjetil();
 		ArrayList<Projectil> result = new ArrayList<Projectil>();
 		
 		for (Projectil pro : pr) {
-			if(pro.getState().equals(ACTIVE)) {
+			if(pro.getState().equals(Active.instancia)) {
 				
-				if(pro.getY() < 0) INACTIVE.setState(p);
+				if(pro.getY() < 0) Inactive.setState(p);
 				else {
 					pro.setX(pro.getX() + pro.getVeloX()*delta);
 					pro.setY(pro.getY() + pro.getVeloY()*delta);
@@ -74,7 +70,7 @@ public class GameUtils {
 		
 	}
 	
-	public ArrayList<Enemy> checkProjectil(ArrayList<Enemy> p, double delta){
+	public static ArrayList<Enemy> checkProjectil(ArrayList<Enemy> p, double delta){
 		
 		for (Enemy e : p) {
 			
@@ -83,9 +79,9 @@ public class GameUtils {
 			ArrayList<Enemy> finalEnemy = new ArrayList<Enemy>();
 			
 			for (Projectil pro : pr) {
-				if(pro.getState().equals(ACTIVE)) {
+				if(pro.getState().equals(Active.instancia)) {
 					
-					if(pro.getY() > GameLib.HEIGHT) INACTIVE.setState(e);
+					if(pro.getY() > GameLib.HEIGHT) Inactive.setState(e);
 					else {
 						pro.setX(pro.getX() + pro.getVeloX()*delta);
 						pro.setY(pro.getY() + pro.getVeloY()*delta);
@@ -105,8 +101,8 @@ public class GameUtils {
 		
 	}
 	
-	public void checkExplosion(Player p, long currentTime){
-		if(p.getExplosionEnd() < currentTime) ACTIVE.setState(p);
+	public static void checkExplosion(Player p, long currentTime){
+		if(p.getExplosionEnd() < currentTime) Active.setState(p);
 		
 	}
 }

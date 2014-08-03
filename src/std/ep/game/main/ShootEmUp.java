@@ -7,6 +7,7 @@ import std.ep.game.elements.actions.states.Active;
 import std.ep.game.elements.actions.states.Exploding;
 import std.ep.game.elements.actions.states.State;
 import std.ep.game.elements.enemy.Enemy;
+import std.ep.game.elements.enemy.EnemyActions;
 import std.ep.game.elements.facade.ElementsFacade;
 import std.ep.game.elements.player.Player;
 import std.ep.game.utils.GameUtils;
@@ -33,7 +34,7 @@ public class ShootEmUp {
 		/* (player, projéteis e inimigos) "delta" indica quantos  */
 		/* ms se passaram desde a última atualização.             */
 		
-		long delta = System.currentTimeMillis() - currentTime;
+		double delta = System.currentTimeMillis() - currentTime;
 		
 		/* Já a variável "currentTime" nos dá o timestamp atual.  */
 		
@@ -67,6 +68,9 @@ public class ShootEmUp {
 			
 		//projeteis (inimigos)
 		elements.setEnemy1(util.checkProjectil(e1, delta));
+		
+		//inimigos tipo 1
+		elements.setEnemy1(EnemyActions.checkEnemyState(p, e1, currentTime, delta));
 		
 	}
 	

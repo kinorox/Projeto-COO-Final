@@ -6,7 +6,7 @@ import std.ep.game.elements.projectil.Projectil;
 
 public class Inactive implements State{
 	
-	private Inactive instancia;
+	public static Inactive instancia;
 
 	public Inactive instancia() { 
 		if (this.instancia == null)
@@ -15,19 +15,16 @@ public class Inactive implements State{
 		return this.instancia; 
 	 }
 	
-	@Override
-	public void setState(Player p) {
+	public static void setState(Player p) {
 		p.setState(instancia);
 	}
 
-	@Override
-	public void setState(Enemy e) {
+	public static void setState(Enemy e) {
 		e.setStates(instancia);
 		
 	}
 
-	@Override
-	public void setState(Projectil pr) {
+	public static void setState(Projectil pr) {
 		pr.setState(instancia);
 	}
 

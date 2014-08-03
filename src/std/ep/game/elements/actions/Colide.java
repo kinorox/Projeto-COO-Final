@@ -28,7 +28,7 @@ public class Colide
 					
 					if(dist < a.getRadius())
 					{	
-						EXPLODING.setState(a);
+						Exploding.setState(a);
 						a.setExplosionStart(p.getNextShot());
 						a.setExplosionEnd(p.getNextShot() + 500);
 						
@@ -52,7 +52,7 @@ public class Colide
 			
 			if(dist < (p.getRadius() + a.getRadius()) * 0.8)
 			{	
-				EXPLODING.setState(p);
+				Exploding.setState(p);
 				p.setExplosionStart(p.getNextShot());
 				p.setExplosionEnd(p.getNextShot() + 2000);
 				
@@ -76,7 +76,7 @@ public class Colide
 					
 					if(dist < (p.getRadius() + pr.getRadius()) * 0.8)
 					{		
-						EXPLODING.setState(p);
+						Exploding.setState(p);
 						p.setExplosionStart(p.getNextShot()); //NextShot armazena o valor de currentTime
 						p.setExplosionEnd(p.getNextShot() + 2000);
 					}

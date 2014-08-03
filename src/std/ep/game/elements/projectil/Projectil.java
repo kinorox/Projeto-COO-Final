@@ -1,6 +1,6 @@
-package std.ep.game.elements.projectile;
+package std.ep.game.elements.projectil;
 
-public class Projectile {
+public class Projectil {
 
 	private boolean active;
 	private double X; // coordenadas x
@@ -9,7 +9,7 @@ public class Projectile {
 	private double VelocidadeY; // velocidade no eixo y
 	private double radius; // raio (tamanho dos projéteis inimigos)
 	
-	public Projectile()
+	public Projectil()
 	{
 		this.active  = true;
 		this.X  = 0.0;
@@ -20,7 +20,7 @@ public class Projectile {
 	}
 	
 	
-	public Projectile(double radius) {
+	public Projectil(double radius) {
 		super();
 		this.radius = radius;
 	}

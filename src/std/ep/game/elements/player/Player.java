@@ -1,5 +1,5 @@
 package std.ep.game.elements.player;
-import std.ep.game.elements.projectile.*;
+import std.ep.game.elements.projectil.*;
 
 public class Player {
 
@@ -12,13 +12,13 @@ public class Player {
 	private double explosionStart;								// instante do início da explosão
 	private double explosionEnd;								// instante do final da explosão
 	public long nextShot;										// instante a partir do qual pode haver um próximo tiro
-	private Projectile projetil; 
+	private Projectil projetil; 
 	
 	public Player(long nextShot)
 	{
 		super();
 		this.nextShot = nextShot;
-		this.projetil = new Projectile();
+		this.projetil = new Projectil();
 	}
 	
 	public int getState() {
@@ -76,7 +76,7 @@ public class Player {
 		this.nextShot = nextShot;
 	}
 	
-	public Projectile getProjetil()
+	public Projectil getProjetil()
 	{
 		return this.projetil;
 	}

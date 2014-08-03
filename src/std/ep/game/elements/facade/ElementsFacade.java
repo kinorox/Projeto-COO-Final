@@ -7,7 +7,7 @@ import std.ep.game.elements.enemy.Enemy;
 import std.ep.game.elements.enemy.Enemy1;
 import std.ep.game.elements.enemy.Enemy2;
 import std.ep.game.elements.player.Player;
-import std.ep.game.elements.projectile.Projectile;
+import std.ep.game.elements.projectil.Projectil;
 import std.ep.game.lib.GameLib;
 
 public class ElementsFacade {
@@ -21,7 +21,6 @@ public class ElementsFacade {
 	
 	public void initializeElements(){
 
-		long delta;
 		long currentTime = System.currentTimeMillis();
 		
 		//inicializacao
@@ -90,6 +89,22 @@ public class ElementsFacade {
 
 	public Player getP() {
 		return p;
+	}
+
+	public void setP(Player p) {
+		this.p = p;
+	}
+
+	public void setEnemy1(ArrayList<Enemy> enemy1) {
+		this.enemy1 = enemy1;
+	}
+
+	public void setEnemy2(ArrayList<Enemy> enemy2) {
+		this.enemy2 = enemy2;
+	}
+
+	public void setEnemy3(ArrayList<Enemy> enemy3) {
+		this.enemy3 = enemy3;
 	}
 	
 }

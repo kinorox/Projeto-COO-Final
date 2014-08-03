@@ -1,4 +1,4 @@
-package std.ep.game.elements.colide;
+package std.ep.game.elements.actions;
 import java.util.ArrayList;
 
 import std.ep.game.elements.enemy.Enemy;
@@ -7,8 +7,14 @@ import std.ep.game.elements.player.Player;
 public class Colide 
 {
 	
-	public void playerProjectileCollision(Player p, ArrayList<Enemy> e)
+	private Integer ACTIVE = 1;
+	private Integer EXPLODING = 2;
+	
+	public ArrayList<Enemy> enemyColisionWithPlayerProjectile(Player p, ArrayList<Enemy> e)
 	{
+		
+		ArrayList<Enemy> er = new ArrayList<>(e.size());
+		
 		for(Enemy a : e)
 		{
 			if(a.getStates() == ACTIVE)
@@ -22,12 +28,16 @@ public class Colide
 					a.setStates(EXPLODING);
 					a.setExplosionStart(p.getNextShot());
 					a.setExplosionEnd(p.getNextShot() + 500);
+					
+					er.add(a);
 				}
 			}
 		}
+		
+		return er;
 	}
 	
-	public void playerEnemyCollision(Player p, ArrayList<Enemy> e) //DEVE RETORNAR UM OBJETO P?
+	public Player playerEnemyCollision(Player p, ArrayList<Enemy> e) //DEVE RETORNAR UM OBJETO P?
 	{
 		for(Enemy a : e)
 		{
@@ -40,11 +50,15 @@ public class Colide
 				p.setState(EXPLODING);
 				p.setExplosionStart(p.getNextShot());
 				p.setExplosionEnd(p.getNextShot() + 2000);
+				
+				return p;
 			}
 		}
+		
+		return null;
 	}
 	
-	public void playerProjectileEnemyCollision(Player p, ArrayList<Enemy> e)
+	public Player playerColisionWithEnemyProjectile(Player p, ArrayList<Enemy> e)
 	{
 		if(p.getState() == ACTIVE)
 		{		
@@ -62,5 +76,7 @@ public class Colide
 				}
 			}
 		}
+		
+		return null;
 	}
 }

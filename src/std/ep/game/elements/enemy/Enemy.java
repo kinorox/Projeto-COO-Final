@@ -1,5 +1,5 @@
 package std.ep.game.elements.enemy;
-import std.ep.game.elements.projectile.*;
+import std.ep.game.elements.projectil.*;
 import std.ep.game.lib.GameLib;
 
 public abstract class Enemy {	
@@ -13,11 +13,11 @@ public abstract class Enemy {
 	private double explosionStart;			// instantes dos inícios das explosões
 	private double explosionEnd;			// instantes dos finais das explosões
 	private double radius;
-	private Projectile projetil;
+	private Projectil projetil;
 	
 	public Enemy()
 	{
-		projetil = new Projectile();
+		projetil = new Projectil();
 	}
 
 	public int getStates() {
@@ -84,7 +84,7 @@ public abstract class Enemy {
 		this.explosionEnd = explosionEnd;
 	}
 	
-	public Projectile getProjetil() {
+	public Projectil getProjetil() {
 		return projetil;
 	}
 	

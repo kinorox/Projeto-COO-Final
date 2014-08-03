@@ -9,13 +9,8 @@ public class Projectile {
 	private double yVcoord; // velocidade no eixo y
 	private double radius; // raio (tamanho dos projéteis inimigos)
 	
-	public Projectile(double xCoord, double yCoord, double xVcoord,
-			double yVcoord, double radius) {
+	public Projectile(double radius) {
 		super();
-		this.xCoord = xCoord;
-		this.yCoord = yCoord;
-		this.xVcoord = xVcoord;
-		this.yVcoord = yVcoord;
 		this.radius = radius;
 	}
 

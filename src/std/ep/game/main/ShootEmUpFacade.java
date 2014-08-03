@@ -16,12 +16,11 @@ public class ShootEmUpFacade {
 	private ArrayList<Enemy> enemy2;
 	private ArrayList<Enemy> enemy3;
 	
-	private ArrayList<Background> primary;
-	private ArrayList<Background> secondary;
+	private ArrayList<Background> primaryBG;
+	private ArrayList<Background> secondaryBG;
 	
-	private Projectile projectile_e1;
-	private Projectile projectile_e2;
-	private Projectile projectile_e3;
+	private ArrayList<Projectile> e_projectile;
+	private ArrayList<Projectile> projectile;
 	
 	private Player p;
 	
@@ -31,37 +30,62 @@ public class ShootEmUpFacade {
 		long currentTime = System.currentTimeMillis();
 		
 		//inicializacao
+		Player p = new Player(currentTime);
+		p.setState(1); //active
+		
+		projectile = initializeProjectile(10, 1.0);
+		e_projectile = initializeProjectile(200, 2.0);
 		enemy1 = initializeEnemy();
 		enemy2 = initializeEnemy();
+		primaryBG = initializeBackground(20, 0.070);
+		secondaryBG = initializeBackground(50, 0.045);
 		
-		primary = new ArrayList<>(20);
-		for(int i = 0; i<primary.size(); i++){
-			Background b = new Background();
-			b.setxCoord(Math.random() * GameLib.WIDTH);
-			b.setyCoord(Math.random() * GameLib.HEIGHT);
-			primary.add(b);
+		GameLib.initGraphics();
+		
+	}
+	
+	private ArrayList<Projectile> initializeProjectile(int size, double radius){
+		ArrayList<Projectile> p = new ArrayList<>(size);
+		
+		for(int i = 0; i<=size; i++){
+			Projectile pj = new Projectile(radius);
+			pj.setActive(false);
+			
+			p.add(pj);
 		}
 		
-		secondary = new ArrayList<>(50);
-		for(int i = 0; i<secondary.size(); i++){
+		return p;
+	}
+
+	private ArrayList<Background> initializeBackground(int size, double speed) {
+		ArrayList<Background> bg = new ArrayList<>(size);
+		
+		for(int i = 0; i<=size; i++){
 			Background b = new Background();
+			b.setSpeed(speed);
 			b.setxCoord(Math.random() * GameLib.WIDTH);
 			b.setyCoord(Math.random() * GameLib.HEIGHT);
-			secondary.add(b);
+			bg.add(b);
 		}
 		
+		return bg;
 	}
 
 	private ArrayList<Enemy> initializeEnemy() {
 		ArrayList<Enemy> en = new ArrayList<>(10);
 		
-		for(int i = 0; i<enemy1.size(); i++) {
+		for(int i = 0; i<=10; i++) {
 			Enemy e = new Enemy1(System.currentTimeMillis());
 			e.setStates(0); //inactive
 			en.add(e);
 		}
 		
 		return en;
+	}
+	
+	public static void busyWait(long time){
+		
+		while(System.currentTimeMillis() < time) Thread.yield();
 	}
 	
 }

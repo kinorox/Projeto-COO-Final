@@ -11,7 +11,7 @@ public class Enemy2 extends Enemy {
 	
 	public Enemy2(long nextEnemy2) {
 		super();
-		this.nextEnemy2 = nextEnemy2 + 2000;
+		this.nextEnemy2 = nextEnemy2 + 7000;
 	}
 	
 	

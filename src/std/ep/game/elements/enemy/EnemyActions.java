@@ -12,11 +12,11 @@ import std.ep.game.utils.GameUtils;
 
 public class EnemyActions {
 	
-	public static ArrayList<Enemy> checkEnemyState(Player p, ArrayList<Enemy1> eArray, long currentTime, double delta) {
+	public static ArrayList<Enemy> checkEnemy1State(Player p, ArrayList<Enemy> eArray, long currentTime, double delta) {
 		
 		ArrayList<Enemy> result = new ArrayList<Enemy>();
 		
-		for(Enemy1 e : eArray ) {
+		for(Enemy e : eArray ) {
 			if(e.getStates().equals(Exploding.instancia)){
 				if(currentTime > e.getExplosionEnd()){
 					Inactive.setState(e);
@@ -31,7 +31,7 @@ public class EnemyActions {
 					e.setY(e.getY() + e.getVelocidade() * Math.sin(e.getAngle()) * delta * (-1.0));
 					e.setAngle(e.getAngle() + e.getRv() * delta);
 					
-					if(currentTime > e.getNextShoot() && e.getY() < p.getY()) {
+					if(currentTime > ((Enemy1) e).getNextShoot() && e.getY() < p.getY()) {
 						ArrayList<Projectil> pr = e.getProjetil();
 						Integer free = GameUtils.findFreeIndex(pr);
 						
@@ -46,7 +46,7 @@ public class EnemyActions {
 							
 							pr.set(free, pro);
 							
-							e.setNextShoot((long) (currentTime + 200 + Math.random() * 500));
+							((Enemy1) e).setNextShoot((long) (currentTime + 200 + Math.random() * 500));
 							
 						}
 					}

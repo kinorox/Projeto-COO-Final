@@ -44,6 +44,10 @@ public class ShootEmUp {
 		ArrayList<Enemy> e1 = elements.getEnemy1();
 		ArrayList<Enemy> e2 = elements.getEnemy2();
 		ArrayList<Enemy> e3 = elements.getEnemy3();
+		
+		/**
+		 * colisoes
+		 */
 
 		//checar colisoes player - projetil (inimigo)
 		elements.setP(colisionHelper.playerColisionWithEnemyProjectile(p, e1));
@@ -73,7 +77,7 @@ public class ShootEmUp {
 		elements.setEnemy1(EnemyActions.checkEnemy1State(p, e1, currentTime, delta));
 		
 		//inimigo tipo 2
-		elements.setEnemy2(EnemyActions.checkEnemy1State(p, e2, currentTime, delta));
+		elements.setEnemy2(EnemyActions.checkEnemy2State(p, e2, currentTime, delta));
 		
 	}
 	

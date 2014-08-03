@@ -31,19 +31,21 @@ public class GameUtils {
 	/* de índices é defnida através do parâmetro "amount") do */
 	/* array, referentes a posições "inativas".               */ 
 
-	public ArrayList<Integer> findFreeIndex(State state, int amount){
+	public static ArrayList<Integer> findFreeIndex(Enemy e, int amount){
 
 		Integer i, k;
-		ArrayList<Integer> freeArray =  { stateArray.length, stateArray.length, stateArray.length };
-		int [] freeArray = { stateArray.length, stateArray.length, stateArray.length };
+		ArrayList<Integer> freeArray =  new ArrayList<Integer>();
+		freeArray.add(e.getProjetil().size());
+		freeArray.add(e.getProjetil().size());
+		freeArray.add(e.getProjetil().size());
 		
-		for(i = 0, k = 0; i < stateArray.length && k < amount; i++){
-				
-			if(stateArray[i] == INACTIVE) { 
-				
-				freeArray[k] = i; 
+		for(i = 0, k = 0; i < e.getProjetil().size() && k < amount; i++){
+			
+			if(e.getProjetil().get(i).equals(Inactive.instancia)) {
+				freeArray.set(k, i);
 				k++;
 			}
+			
 		}
 		
 		return freeArray;

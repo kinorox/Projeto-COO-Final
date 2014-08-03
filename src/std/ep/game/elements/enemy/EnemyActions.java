@@ -74,6 +74,7 @@ public class EnemyActions {
 				
 				if(e.getY() > GameLib.HEIGHT + 10) Inactive.setState(e);
 				else {
+					
 					boolean shootNow = false;
 					double previousY = e.getY();
 					
@@ -103,37 +104,39 @@ public class EnemyActions {
 					}
 					
 					if(shootNow){
-						double[] angles = { Math.PI/2 + Math.PI/8, Math.PI/2, Math.PI/2 - Math.PI/8 }; 
-					}
-				}
-		
-																	
-					if(shootNow){
-
-						double [] angles = { Math.PI/2 + Math.PI/8, Math.PI/2, Math.PI/2 - Math.PI/8 };
-						int [] freeArray = findFreeIndex(e_projectile_states, angles.length);
-
-						for(int k = 0; k < freeArray.length; k++){
+						ArrayList<Double> angles = new ArrayList<Double>();
+						angles.add(Math.PI/2 + Math.PI/8);
+						angles.add(Math.PI/2);
+						angles.add(Math.PI/2 - Math.PI/8);
+						
+						ArrayList<Integer> freeArray = GameUtils.findFreeIndex(e, angles.size());
+						
+						for (int k = 0; k < freeArray.size(); k++){
+							int free = freeArray.get(k);
 							
-							int free = freeArray[k];
-							
-							if(free < e_projectile_states.length){
+							if(free < e.getProjetil().size()){
 								
-								double a = angles[k] + Math.random() * Math.PI/6 - Math.PI/12;
-								double vx = Math.cos(a);
-								double vy = Math.sin(a);
-									
-								e_projectile_X[free] = enemy2_X[i];
-								e_projectile_Y[free] = enemy2_Y[i];
-								e_projectile_VX[free] = vx * 0.30;
-								e_projectile_VY[free] = vy * 0.30;
-								e_projectile_states[free] = 1;
+								Double a = angles.get(k) + Math.random() * Math.PI/6 - Math.PI/12;
+								Double vx = Math.cos(a);
+								Double vy = Math.sin(a);
+								
+								e.getProjetil().get(free).setX(e.getX());
+								e.getProjetil().get(free).setY(e.getY());
+								e.getProjetil().get(free).setVeloX(vx * 0.30);
+								e.getProjetil().get(free).setVeloY(vy * 0.30);
+								Active.setState(e.getProjetil().get(free));
+								
 							}
 						}
 					}
 				}
+
 			}
+			
+			result.add(e);
 		}
+		
+		return result;
 	}
 
 }

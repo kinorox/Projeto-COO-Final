@@ -62,14 +62,11 @@ public class ShootEmUp {
 		/**
 		 * Atualizacao de status
 		 */
-		if(p.getState().equals(ACTIVE)) {
-			//projeteis (player)
-			p.setProjetil(util.checkProjectil(p, delta));
+		//projeteis (player)
+		p.setProjetil(util.checkProjectil(p, delta));
 			
-			//projeteis (inimigos)
-		}
-		
-		
+		//projeteis (inimigos)
+		elements.setEnemy1(util.checkProjectil(e1, delta));
 		
 	}
 	

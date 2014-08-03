@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import std.ep.game.elements.actions.states.*;
 import std.ep.game.elements.enemy.Enemy;
 import std.ep.game.elements.player.Player;
+import std.ep.game.elements.projectil.*;
 
 public class Colide 
 {
@@ -19,18 +20,22 @@ public class Colide
 		{
 			if(a.getStates().equals(ACTIVE))
 			{	
-				double dx = a.getX() - p.getProjetil().getX();
-				double dy = a.getY() - p.getProjetil().getY();
-				double dist = Math.sqrt(dx * dx + dy * dy);
 				
-				if(dist < a.getRadius())
-				{	
-					EXPLODING.setState(a);
-					a.setExplosionStart(p.getNextShot());
-					a.setExplosionEnd(p.getNextShot() + 500);
+				for(Projectil pr : a.getProjetil()) {
+					double dx = a.getX() - pr.getX();
+					double dy = a.getY() - pr.getY();
+					double dist = Math.sqrt(dx * dx + dy * dy);
 					
-					er.add(a);
+					if(dist < a.getRadius())
+					{	
+						EXPLODING.setState(a);
+						a.setExplosionStart(p.getNextShot());
+						a.setExplosionEnd(p.getNextShot() + 500);
+						
+						er.add(a);
+					}
 				}
+				
 			}
 		}
 		
@@ -64,16 +69,19 @@ public class Colide
 		{		
 			for(Enemy a: e)
 			{
-				double dx 	= a.getProjetil().getX() - p.getX();
-				double dy 	= a.getProjetil().getY() - p.getY();
-				double dist = Math.sqrt(dx * dx + dy * dy);
-				
-				if(dist < (p.getRadius() + a.getProjetil().getRadius()) * 0.8)
-				{		
-					EXPLODING.setState(p);
-					p.setExplosionStart(p.getNextShot()); //NextShot armazena o valor de currentTime
-					p.setExplosionEnd(p.getNextShot() + 2000);
+				for(Projectil pr : a.getProjetil()) {
+					double dx 	= pr.getX() - p.getX();
+					double dy 	= pr.getY() - p.getY();
+					double dist = Math.sqrt(dx * dx + dy * dy);
+					
+					if(dist < (p.getRadius() + pr.getRadius()) * 0.8)
+					{		
+						EXPLODING.setState(p);
+						p.setExplosionStart(p.getNextShot()); //NextShot armazena o valor de currentTime
+						p.setExplosionEnd(p.getNextShot() + 2000);
+					}
 				}
+				
 			}
 		}
 		

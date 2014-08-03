@@ -6,6 +6,7 @@ import std.ep.game.elements.actions.states.*;
 import std.ep.game.elements.enemy.Enemy;
 import std.ep.game.elements.player.Player;
 import std.ep.game.elements.projectil.Projectil;
+import std.ep.game.lib.GameLib;
 
 public class GameUtils {
 
@@ -59,7 +60,7 @@ public class GameUtils {
 		for (Projectil pro : pr) {
 			if(pro.getState().equals(ACTIVE)) {
 				
-				if(checkOutOfScreen(pro.getY())) INACTIVE.setState(p);
+				if(pro.getY() < 0) INACTIVE.setState(p);
 				else {
 					pro.setX(pro.getX() + pro.getVeloX()*delta);
 					pro.setY(pro.getY() + pro.getVeloY()*delta);
@@ -73,21 +74,31 @@ public class GameUtils {
 		
 	}
 	
-	public ArrayList<Projectil> checkProjectil(Enemy p, double delta){
-		ArrayList<Projectil> pr = p.getProjetil();
-		ArrayList<Projectil> result = new ArrayList<Projectil>();
+	public ArrayList<Enemy> checkProjectil(ArrayList<Enemy> p, double delta){
 		
-		for (Projectil pro : pr) {
-			if(pro.getState().equals(ACTIVE)) {
-				
-				if(checkOutOfScreen(pro.getY())) INACTIVE.setState(p);
-				else {
-					pro.setX(pro.getX() + pro.getVeloX()*delta);
-					pro.setY(pro.getY() + pro.getVeloY()*delta);
+		for (Enemy e : p) {
+			
+			ArrayList<Projectil> pr = e.getProjetil();
+			ArrayList<Projectil> result = new ArrayList<Projectil>();
+			ArrayList<Enemy> finalEnemy = new ArrayList<Enemy>();
+			
+			for (Projectil pro : pr) {
+				if(pro.getState().equals(ACTIVE)) {
+					
+					if(pro.getY() > GameLib.HEIGHT) INACTIVE.setState(e);
+					else {
+						pro.setX(pro.getX() + pro.getVeloX()*delta);
+						pro.setY(pro.getY() + pro.getVeloY()*delta);
+					}
+					
+					e.setProjetil(result);
+					
 				}
-				
-				return result;
 			}
+			
+			finalEnemy.add(e);
+			
+			return finalEnemy;
 		}
 		
 		return null;
@@ -97,11 +108,5 @@ public class GameUtils {
 	public void checkExplosion(Player p, long currentTime){
 		if(p.getExplosionEnd() < currentTime) ACTIVE.setState(p);
 		
-	}
-	
-	public boolean checkOutOfScreen(double y){
-		if(y<0) return true;
-				
-		return false;
 	}
 }

@@ -73,7 +73,7 @@ public class ShootEmUp {
 		elements.setEnemy1(EnemyActions.checkEnemy1State(p, e1, currentTime, delta));
 		
 		//inimigo tipo 2
-		elements.setEnemy1(EnemyActions.checkEnemy1State(p, e1, currentTime, delta));
+		elements.setEnemy2(EnemyActions.checkEnemy1State(p, e2, currentTime, delta));
 		
 	}
 	

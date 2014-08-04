@@ -56,7 +56,7 @@ public class GameUtils {
 		ArrayList<Projectil> result = new ArrayList<Projectil>();
 		
 		for (Projectil pro : pr) {
-			if(pro.getState().equals(Active.instancia)) {
+			if(pro.getState().equals(Active.instancia())) {
 				
 				if(pro.getY() < 0) Inactive.setState(p);
 				else {
@@ -81,7 +81,7 @@ public class GameUtils {
 			ArrayList<Enemy> finalEnemy = new ArrayList<Enemy>();
 			
 			for (Projectil pro : pr) {
-				if(pro.getState().equals(Active.instancia)) {
+				if(pro.getState().equals(Active.instancia())) {
 					
 					if(pro.getY() > GameLib.HEIGHT) Inactive.setState(e);
 					else {

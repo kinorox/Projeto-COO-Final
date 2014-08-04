@@ -8,24 +8,24 @@ public class Active implements State{
 	
 	public static Active instancia;
 
-	public Active instancia() { 
-		if (this.instancia == null)
-			this.instancia = new Active();
+	public static Active instancia() { 
+		if (instancia == null)
+			instancia = new Active();
 		 
-		return this.instancia; 
+		return instancia; 
 	 }
 	
 	public static void setState(Player p) {
-		p.setState(instancia);
+		p.setState(instancia());
 	}
 
 	public static void setState(Enemy e) {
-		e.setStates(instancia);
+		e.setStates(instancia());
 		
 	}
 
 	public static void setState(Projectil pr) {
-		pr.setState(instancia);
+		pr.setState(instancia());
 	}
 
 }

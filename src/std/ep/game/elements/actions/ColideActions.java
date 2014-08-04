@@ -5,7 +5,7 @@ import std.ep.game.elements.enemy.Enemy;
 import std.ep.game.elements.player.Player;
 import std.ep.game.elements.projectil.*;
 
-public class Colide 
+public class ColideActions 
 {
 
 	private State EXPLODING = new Exploding();
@@ -18,7 +18,7 @@ public class Colide
 		
 		for(Enemy a : e)
 		{
-			if(a.getStates().equals(ACTIVE))
+			if(a.getStates().equals(Active.instancia()))
 			{	
 				
 				for(Projectil pr : a.getProjetil()) {
@@ -65,9 +65,9 @@ public class Colide
 	
 	public Player playerColisionWithEnemyProjectile(Player p, ArrayList<Enemy> e)
 	{
-		if(p.getState().equals(ACTIVE))
+		if(p.getState().equals(Active.instancia()))
 		{		
-			for(Enemy a: e)
+			for(Enemy a : e)
 			{
 				for(Projectil pr : a.getProjetil()) {
 					double dx 	= pr.getX() - p.getX();

@@ -5,22 +5,23 @@ import std.ep.game.elements.actions.states.State;
 
 public class Projectil {
 
+	public Projectil(State state, double x, double y, double velocidadeX,
+			double velocidadeY, double radius) {
+		super();
+		this.state = state;
+		X = x;
+		Y = y;
+		VelocidadeX = velocidadeX;
+		VelocidadeY = velocidadeY;
+		this.radius = radius;
+	}
+
 	private State state;
 	private double X; // coordenadas x
 	private double Y; // coordenadas y
 	private double VelocidadeX; // velocidade no eixo x
 	private double VelocidadeY; // velocidade no eixo y
 	private double radius; // raio (tamanho dos projéteis inimigos)
-	
-	public Projectil()
-	{
-		this.state  = new Inactive();
-		this.X  = 0.0;
-		this.Y  = 0.0;
-		this.VelocidadeX = 0.0;
-		this.VelocidadeY = 0.0;
-		this.radius  = 0.0;
-	}
 	
 	
 	public Projectil(double radius) {

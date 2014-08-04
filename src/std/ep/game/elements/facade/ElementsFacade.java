@@ -10,6 +10,7 @@ import std.ep.game.elements.background.Background;
 import std.ep.game.elements.enemy.Enemy;
 import std.ep.game.elements.enemy.Enemy1;
 import std.ep.game.elements.enemy.Enemy2;
+import std.ep.game.elements.enemy.Enemy3;
 import std.ep.game.elements.player.Player;
 import std.ep.game.elements.projectil.Projectil;
 import std.ep.game.lib.GameLib;
@@ -32,11 +33,10 @@ public class ElementsFacade {
 	public void initializeElements(){
 		
 		//inicializacao
-		Player p = new Player(currentTime);
-		Active.setState(p);
-
-		enemy1 = initializeEnemy();
-		enemy2 = initializeEnemy();
+		p = initializePlayer(currentTime);
+		enemy1 = initializeEnemy(1);
+		enemy2 = initializeEnemy(2);
+		enemy3 = initializeEnemy(3);
 		primaryBG = initializeBackground(20, 0.070);
 		secondaryBG = initializeBackground(50, 0.045);
 		
@@ -58,12 +58,49 @@ public class ElementsFacade {
 		return bg;
 	}
 
-	private ArrayList<Enemy> initializeEnemy() {
+	private Player initializePlayer(long currentTime){
+		Player p = new Player(currentTime);
+		Active.setState(p);
+		ArrayList<Projectil> pr = new ArrayList<Projectil>();
+		
+		for(int i = 0; i<=10; i++) {
+			Projectil pro = new Projectil(Inactive.instancia(), 0, 0, 0, 0, 0);
+			Inactive.setState(pro);
+			pr.add(pro);
+		}
+		
+		p.setProjetil(pr);
+		
+		return p;
+	}
+	
+	private ArrayList<Enemy> initializeEnemy(int enemyNumber) {
 		ArrayList<Enemy> en = new ArrayList<>(10);
 		
 		for(int i = 0; i<=10; i++) {
-			Enemy e = new Enemy1(System.currentTimeMillis());
+			Enemy e = null;
+			
+			if(enemyNumber == 1) {
+				e = new Enemy1(System.currentTimeMillis());
+			}
+			if(enemyNumber == 2) {
+				e = new Enemy2(System.currentTimeMillis());
+			}
+			if(enemyNumber == 3) {
+				e = new Enemy3(System.currentTimeMillis());
+			}
+			
 			Inactive.setState(e);
+			
+			ArrayList<Projectil> p = new ArrayList<Projectil>();
+			
+			for(int j = 0; j<=200; j++){
+				Projectil pr = new Projectil(Inactive.instancia(), 0, 0, 0, 0, 2.0);
+				p.add(pr);
+			}
+			
+			e.setProjetil(p);
+			
 			en.add(e);
 		}
 		

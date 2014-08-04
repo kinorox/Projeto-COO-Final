@@ -1,10 +1,14 @@
-package std.ep.game.elements.enemy;
+package std.ep.game.elements.actions;
 
 import java.util.ArrayList;
 
 import std.ep.game.elements.actions.states.Active;
 import std.ep.game.elements.actions.states.Exploding;
 import std.ep.game.elements.actions.states.Inactive;
+import std.ep.game.elements.enemy.Enemy;
+import std.ep.game.elements.enemy.Enemy1;
+import std.ep.game.elements.enemy.Enemy2;
+import std.ep.game.elements.enemy.Enemy3;
 import std.ep.game.elements.player.Player;
 import std.ep.game.elements.projectil.Projectil;
 import std.ep.game.lib.GameLib;
@@ -17,13 +21,13 @@ public class EnemyActions {
 		ArrayList<Enemy> result = new ArrayList<Enemy>();
 		
 		for(Enemy e : eArray ) {
-			if(e.getStates().equals(Exploding.instancia)){
+			if(e.getStates().equals(Exploding.instancia())){
 				if(currentTime > e.getExplosionEnd()){
 					Inactive.setState(e);
 				}
 			}
 			
-			if(e.getStates().equals(Active.instancia)){
+			if(e.getStates().equals(Active.instancia())){
 				
 				if(e.getY() > GameLib.HEIGHT + 10) Inactive.setState(e);
 				else {
@@ -64,13 +68,13 @@ public class EnemyActions {
 		ArrayList<Enemy> result = new ArrayList<Enemy>();
 		
 		for(Enemy e : eArray ) {
-			if(e.getStates().equals(Exploding.instancia)){
+			if(e.getStates().equals(Exploding.instancia())){
 				if(currentTime > e.getExplosionEnd()){
 					Inactive.setState(e);
 				}
 			}
 			
-			if(e.getStates().equals(Active.instancia)){
+			if(e.getStates().equals(Active.instancia())){
 				
 				if(e.getY() > GameLib.HEIGHT + 10) Inactive.setState(e);
 				else {
@@ -137,6 +141,58 @@ public class EnemyActions {
 		}
 		
 		return result;
+	}
+	
+	public static void checkIfItsTimeToBornBaby1(long currentTime, ArrayList<Enemy> e){
+		
+		Enemy1 e1 = (Enemy1) e.get(0);
+		
+		if(currentTime > e1.getNextEnemy()){
+			Integer free = GameUtils.findFreeIndex(e1.getProjetil());
+			
+			if(free < e1.getProjetil().size()){
+				e.get(free).setX(Math.random() * (GameLib.WIDTH - 20.0) + 10.0);
+				e.get(free).setY(-10.0);
+				e.get(free).setVelocidade(0.20 + Math.random() * 0.15);
+				e.get(free).setAngle(3*Math.PI/2);
+				e.get(free).setRv(0.0);
+				Active.setState(e.get(free));
+				((Enemy1) e.get(free)).setNextShoot(currentTime + 500);
+				((Enemy1) e.get(free)).setNextEnemy(currentTime + 500);
+			}
+		}
+		
+	}
+	
+	public static void checkIfItsTimeToBornBaby2(long currentTime, ArrayList<Enemy> e){
+		
+		Enemy2 e2 = (Enemy2) e.get(0);
+	
+		if(currentTime > e2.getNextEnemy2()){
+			Integer free = GameUtils.findFreeIndex(e2.getProjetil());
+			
+			if(free < e2.getProjetil().size()){
+				
+				e.get(free).setX(GameLib.WIDTH * 0.20);
+				e.get(free).setY(-10.0);
+				e.get(free).setVelocidade(0.42);
+				e.get(free).setAngle(3*Math.PI/2);
+				e.get(free).setRv(0.0);
+				
+				Active.setState(e.get(free));
+
+				((Enemy2) e.get(free)).setEnemy2_count(((Enemy2) e.get(free)).getEnemy2_count()+1);
+				
+				if(((Enemy2) e.get(free)).getEnemy2_count() < 10){
+					((Enemy2) e.get(free)).setNextEnemy2(currentTime + 120);
+				} else {
+					((Enemy2) e.get(free)).setEnemy2_count(0);
+					e.get(free).setX(Math.random() > 0.5 ? GameLib.WIDTH * 0.2 : GameLib.WIDTH * 0.8);
+					((Enemy2) e.get(free)).setNextEnemy2((long) (currentTime + 3000 + Math.random() * 3000));
+				}
+			}
+		}
+		
 	}
 
 }

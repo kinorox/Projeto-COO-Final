@@ -2,21 +2,16 @@ package std.ep.game.main;
 
 import java.util.ArrayList;
 
-import std.ep.game.elements.actions.Colide;
-import std.ep.game.elements.actions.states.Active;
-import std.ep.game.elements.actions.states.Exploding;
-import std.ep.game.elements.actions.states.State;
+import std.ep.game.elements.actions.ColideActions;
+import std.ep.game.elements.actions.EnemyActions;
+import std.ep.game.elements.actions.PlayerActions;
 import std.ep.game.elements.enemy.Enemy;
-import std.ep.game.elements.enemy.EnemyActions;
 import std.ep.game.elements.facade.ElementsFacade;
 import std.ep.game.elements.player.Player;
+import std.ep.game.lib.GameLib;
 import std.ep.game.utils.GameUtils;
 
 public class ShootEmUp {
-	
-	private static State EXPLODING = new Exploding();
-	private static State ACTIVE = new Active();
-	private static State INACTIVE = new Active();
 	
 	public static void main(String[] args){
 		
@@ -24,8 +19,10 @@ public class ShootEmUp {
 		
 		long currentTime = System.currentTimeMillis();
 		
+		boolean running;
+		
 		ElementsFacade elements = new ElementsFacade(currentTime);
-		Colide colisionHelper = new Colide();
+		ColideActions colisionHelper = new ColideActions();
 		GameUtils util = new GameUtils();
 		
 		elements.initializeElements();
@@ -48,21 +45,35 @@ public class ShootEmUp {
 		/**
 		 * colisoes
 		 */
-
 		//checar colisoes player - projetil (inimigo)
-		elements.setP(colisionHelper.playerColisionWithEnemyProjectile(p, e1));
-		elements.setP(colisionHelper.playerColisionWithEnemyProjectile(p, e2));
-		elements.setP(colisionHelper.playerColisionWithEnemyProjectile(p, e3));
+		Player result = colisionHelper.playerColisionWithEnemyProjectile(p, e1);
+		if(result != null) elements.setP(colisionHelper.playerColisionWithEnemyProjectile(p, e1));
+		
+		result = colisionHelper.playerColisionWithEnemyProjectile(p, e2);
+		if(result != null) elements.setP(colisionHelper.playerColisionWithEnemyProjectile(p, e2));
+		
+		result = colisionHelper.playerColisionWithEnemyProjectile(p, e3);
+		if(result != null) elements.setP(colisionHelper.playerColisionWithEnemyProjectile(p, e3));
 		
 		//checar colisoes player - inimigo
-		elements.setP(colisionHelper.playerEnemyCollision(p, e1));
-		elements.setP(colisionHelper.playerEnemyCollision(p, e2));
-		elements.setP(colisionHelper.playerEnemyCollision(p, e3));
+		result = colisionHelper.playerEnemyCollision(p, e1);
+		if(result != null) elements.setP(colisionHelper.playerEnemyCollision(p, e1));
+		
+		result = colisionHelper.playerEnemyCollision(p, e2);
+		if(result != null) elements.setP(colisionHelper.playerEnemyCollision(p, e2));
+		
+		result = colisionHelper.playerEnemyCollision(p, e3);
+		if(result != null) elements.setP(colisionHelper.playerEnemyCollision(p, e3));
 		
 		//checar colisoes inimigo - projetil (player)
-		elements.setEnemy1(colisionHelper.enemyColisionWithPlayerProjectile(p, e1));
-		elements.setEnemy2(colisionHelper.enemyColisionWithPlayerProjectile(p, e2));
-		elements.setEnemy3(colisionHelper.enemyColisionWithPlayerProjectile(p, e3));
+		ArrayList<Enemy> result2 = colisionHelper.enemyColisionWithPlayerProjectile(p, e1);
+		if(result2 != null) elements.setEnemy1(colisionHelper.enemyColisionWithPlayerProjectile(p, e1));
+		
+		result2 = colisionHelper.enemyColisionWithPlayerProjectile(p, e2);
+		if(result2 != null) elements.setEnemy2(colisionHelper.enemyColisionWithPlayerProjectile(p, e2));
+		
+		result2 = colisionHelper.enemyColisionWithPlayerProjectile(p, e2);
+		if(result2 != null) elements.setEnemy3(colisionHelper.enemyColisionWithPlayerProjectile(p, e3));
 		
 		/**
 		 * Atualizacao de status
@@ -78,6 +89,22 @@ public class ShootEmUp {
 		
 		//inimigo tipo 2
 		elements.setEnemy2(EnemyActions.checkEnemy2State(p, e2, currentTime, delta));
+		
+		//checar inimigos1
+		EnemyActions.checkIfItsTimeToBornBaby1(currentTime, e1);
+		
+		//checar inimigos2
+		EnemyActions.checkIfItsTimeToBornBaby2(currentTime, e2);
+		
+		//checar se a explosao ja terminou
+		GameUtils.checkExplosion(p, currentTime);
+		
+		//checa as acoes do usuario
+		elements.setP(PlayerActions.checkWhatTheUserIsPressing(p, delta, currentTime));
+		
+		if(GameLib.iskeyPressed(GameLib.KEY_ESCAPE)) running = false;
+		
+		elements.setP(PlayerActions.checkPlayerInTheWindow(p));
 		
 	}
 	

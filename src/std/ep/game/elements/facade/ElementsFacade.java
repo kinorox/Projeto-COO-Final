@@ -14,6 +14,7 @@ import std.ep.game.elements.enemy.Enemy3;
 import std.ep.game.elements.player.Player;
 import std.ep.game.elements.projectil.Projectil;
 import std.ep.game.lib.GameLib;
+import std.ep.game.utils.GameUtils;
 
 public class ElementsFacade {
 
@@ -32,83 +33,110 @@ public class ElementsFacade {
 
 	public void initializeElements(){
 		
-		//inicializacao
-		p = initializePlayer(currentTime);
-		enemy1 = initializeEnemy(1);
-		enemy2 = initializeEnemy(2);
-		enemy3 = initializeEnemy(3);
-		primaryBG = initializeBackground(20, 0.070);
-		secondaryBG = initializeBackground(50, 0.045);
-		
-		GameLib.initGraphics();
+		try {
+			p = initializePlayer(currentTime);
+			enemy1 = initializeEnemy(1);
+			enemy2 = initializeEnemy(2);
+			enemy3 = initializeEnemy(3);
+			primaryBG = initializeBackground(20, 0.070);
+			secondaryBG = initializeBackground(50, 0.045);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 		
 	}
 
 	private ArrayList<Background> initializeBackground(int size, double speed) {
-		ArrayList<Background> bg = new ArrayList<>(size);
 		
-		for(int i = 0; i<=size; i++){
-			Background b = new Background();
-			b.setSpeed(speed);
-			b.setxCoord(Math.random() * GameLib.WIDTH);
-			b.setyCoord(Math.random() * GameLib.HEIGHT);
-			bg.add(b);
+		try {
+			ArrayList<Background> bg = new ArrayList<>(size);
+			
+			for(int i = 0; i<=size; i++){
+				Background b = new Background();
+				b.setSpeed(speed);
+				b.setxCoord(Math.random() * GameLib.WIDTH);
+				b.setyCoord(Math.random() * GameLib.HEIGHT);
+				bg.add(b);
+			}
+			
+			return bg;
+		} catch (Exception e) {
+			throw e;
 		}
 		
-		return bg;
 	}
 
 	private Player initializePlayer(long currentTime){
-		Player p = new Player(currentTime);
-		Active.setState(p);
-		ArrayList<Projectil> pr = new ArrayList<Projectil>();
 		
-		for(int i = 0; i<=10; i++) {
-			Projectil pro = new Projectil(Inactive.instancia(), 0, 0, 0, 0, 0);
-			Inactive.setState(pro);
-			pr.add(pro);
+		try {
+			Player p = new Player(currentTime);
+			GameUtils.ACTIVE.setState(p);
+			ArrayList<Projectil> pr = new ArrayList<Projectil>();
+			
+			for(int i = 0; i<=10; i++) {
+				Projectil pro = new Projectil(Inactive.instancia(), 0, 0, 0, 0, 0);
+				GameUtils.ACTIVE.setState(pro);
+				pr.add(pro);
+			}
+			
+			p.setX(GameLib.WIDTH / 2);
+			p.setY(GameLib.HEIGHT * 0.90);
+			p.setVeloX(0.25);
+			p.setRadius(12.0);
+			p.setVeloY(0.25);
+			p.setProjetil(pr);
+			
+			return p;
+			
+		} catch (Exception e) {
+			throw e;
 		}
 		
-		p.setProjetil(pr);
-		
-		return p;
 	}
 	
 	private ArrayList<Enemy> initializeEnemy(int enemyNumber) {
-		ArrayList<Enemy> en = new ArrayList<>(10);
 		
-		for(int i = 0; i<=10; i++) {
-			Enemy e = null;
+		try {
+			ArrayList<Enemy> en = new ArrayList<>(10);
 			
-			if(enemyNumber == 1) {
-				e = new Enemy1(System.currentTimeMillis());
+			for(int i = 0; i<=10; i++) {
+				Enemy e = null;
+				
+				if(enemyNumber == 1) {
+					e = new Enemy1(System.currentTimeMillis());
+					e.setRadius(9.0);
+				}
+				if(enemyNumber == 2) {
+					e = new Enemy2(System.currentTimeMillis());
+					e.setRadius(12.0);
+				}
+				if(enemyNumber == 3) {
+					e = new Enemy3(System.currentTimeMillis());
+				}
+				
+				GameUtils.INACTIVE.setState(e);
+				
+				ArrayList<Projectil> p = new ArrayList<Projectil>();
+				
+				for(int j = 0; j<=200; j++){
+					Projectil pr = new Projectil(Inactive.instancia(), 0, 0, 0, 0, 2.0);
+					p.add(pr);
+				}
+				
+				e.setProjetil(p);
+				
+				en.add(e);
 			}
-			if(enemyNumber == 2) {
-				e = new Enemy2(System.currentTimeMillis());
-			}
-			if(enemyNumber == 3) {
-				e = new Enemy3(System.currentTimeMillis());
-			}
 			
-			Inactive.setState(e);
+			return en;
 			
-			ArrayList<Projectil> p = new ArrayList<Projectil>();
-			
-			for(int j = 0; j<=200; j++){
-				Projectil pr = new Projectil(Inactive.instancia(), 0, 0, 0, 0, 2.0);
-				p.add(pr);
-			}
-			
-			e.setProjetil(p);
-			
-			en.add(e);
+		} catch (Exception e) {
+			throw e;
 		}
-		
-		return en;
 	}
 	
 	public static void busyWait(long time){
-		
 		while(System.currentTimeMillis() < time) Thread.yield();
 	}
 

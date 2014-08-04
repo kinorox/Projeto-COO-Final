@@ -15,16 +15,16 @@ public class Active implements State{
 		return instancia; 
 	 }
 	
-	public static void setState(Player p) {
+	public void setState(Player p) {
 		p.setState(instancia());
 	}
 
-	public static void setState(Enemy e) {
+	public void setState(Enemy e) {
 		e.setStates(instancia());
 		
 	}
 
-	public static void setState(Projectil pr) {
+	public void setState(Projectil pr) {
 		pr.setState(instancia());
 	}
 

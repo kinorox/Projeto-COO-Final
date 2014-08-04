@@ -23,13 +23,13 @@ public class EnemyActions {
 		for(Enemy e : eArray ) {
 			if(e.getStates().equals(Exploding.instancia())){
 				if(currentTime > e.getExplosionEnd()){
-					Inactive.setState(e);
+					GameUtils.ACTIVE.setState(e);
 				}
 			}
 			
 			if(e.getStates().equals(Active.instancia())){
 				
-				if(e.getY() > GameLib.HEIGHT + 10) Inactive.setState(e);
+				if(e.getY() > GameLib.HEIGHT + 10) GameUtils.INACTIVE.setState(e);
 				else {
 					e.setX(e.getX() + e.getVelocidade() * Math.cos(e.getAngle()) * delta);
 					e.setY(e.getY() + e.getVelocidade() * Math.sin(e.getAngle()) * delta * (-1.0));
@@ -37,7 +37,7 @@ public class EnemyActions {
 					
 					if(currentTime > ((Enemy1) e).getNextShoot() && e.getY() < p.getY()) {
 						ArrayList<Projectil> pr = e.getProjetil();
-						Integer free = GameUtils.findFreeIndex(pr);
+						Integer free = GameUtils.findFreeIndex(eArray);
 						
 						if(free < pr.size()) {
 							
@@ -46,7 +46,7 @@ public class EnemyActions {
 							pro.setY(e.getY());
 							pro.setVeloX(Math.cos(e.getAngle()) * 0.45);
 							pro.setVeloY(Math.sin(e.getAngle()) * 0.45 * (-1.0));
-							Active.setState(pro);
+							GameUtils.ACTIVE.setState(pro);
 							
 							pr.set(free, pro);
 							
@@ -70,13 +70,13 @@ public class EnemyActions {
 		for(Enemy e : eArray ) {
 			if(e.getStates().equals(Exploding.instancia())){
 				if(currentTime > e.getExplosionEnd()){
-					Inactive.setState(e);
+					GameUtils.INACTIVE.setState(e);
 				}
 			}
 			
 			if(e.getStates().equals(Active.instancia())){
 				
-				if(e.getY() > GameLib.HEIGHT + 10) Inactive.setState(e);
+				if(e.getY() > GameLib.HEIGHT + 10) GameUtils.INACTIVE.setState(e);
 				else {
 					
 					boolean shootNow = false;
@@ -128,7 +128,7 @@ public class EnemyActions {
 								e.getProjetil().get(free).setY(e.getY());
 								e.getProjetil().get(free).setVeloX(vx * 0.30);
 								e.getProjetil().get(free).setVeloY(vy * 0.30);
-								Active.setState(e.getProjetil().get(free));
+								GameUtils.ACTIVE.setState(e.getProjetil().get(free));
 								
 							}
 						}
@@ -143,35 +143,37 @@ public class EnemyActions {
 		return result;
 	}
 	
-	public static void checkIfItsTimeToBornBaby1(long currentTime, ArrayList<Enemy> e){
+	public static ArrayList<Enemy> checkIfItsTimeToBornBaby1(long currentTime, ArrayList<Enemy> e){
 		
 		Enemy1 e1 = (Enemy1) e.get(0);
 		
 		if(currentTime > e1.getNextEnemy()){
-			Integer free = GameUtils.findFreeIndex(e1.getProjetil());
+			Integer free = GameUtils.findFreeIndex(e);
 			
-			if(free < e1.getProjetil().size()){
+			if(free < e.size()){
 				e.get(free).setX(Math.random() * (GameLib.WIDTH - 20.0) + 10.0);
 				e.get(free).setY(-10.0);
 				e.get(free).setVelocidade(0.20 + Math.random() * 0.15);
 				e.get(free).setAngle(3*Math.PI/2);
 				e.get(free).setRv(0.0);
-				Active.setState(e.get(free));
+				GameUtils.ACTIVE.setState(e.get(free));
 				((Enemy1) e.get(free)).setNextShoot(currentTime + 500);
 				((Enemy1) e.get(free)).setNextEnemy(currentTime + 500);
 			}
 		}
 		
+		return e;
+		
 	}
 	
-	public static void checkIfItsTimeToBornBaby2(long currentTime, ArrayList<Enemy> e){
+	public static ArrayList<Enemy> checkIfItsTimeToBornBaby2(long currentTime, ArrayList<Enemy> e){
 		
 		Enemy2 e2 = (Enemy2) e.get(0);
 	
 		if(currentTime > e2.getNextEnemy2()){
-			Integer free = GameUtils.findFreeIndex(e2.getProjetil());
+			Integer free = GameUtils.findFreeIndex(e);
 			
-			if(free < e2.getProjetil().size()){
+			if(free < e.size()){
 				
 				e.get(free).setX(GameLib.WIDTH * 0.20);
 				e.get(free).setY(-10.0);
@@ -179,7 +181,7 @@ public class EnemyActions {
 				e.get(free).setAngle(3*Math.PI/2);
 				e.get(free).setRv(0.0);
 				
-				Active.setState(e.get(free));
+				GameUtils.ACTIVE.setState(e.get(free));
 
 				((Enemy2) e.get(free)).setEnemy2_count(((Enemy2) e.get(free)).getEnemy2_count()+1);
 				
@@ -192,6 +194,8 @@ public class EnemyActions {
 				}
 			}
 		}
+		
+		return e;
 		
 	}
 

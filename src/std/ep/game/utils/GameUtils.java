@@ -10,20 +10,35 @@ import std.ep.game.lib.GameLib;
 
 public class GameUtils {
 	
+	public static Active ACTIVE;
+	public static Inactive INACTIVE;
+	public static Exploding EXPLODING;
+	
+	public static void beginState(){
+		ACTIVE = new Active();
+		INACTIVE = new Inactive();
+		EXPLODING = new Exploding();
+	}
+	
 	/* Encontra e devolve o primeiro índice do  */
 	/* array referente a uma posição "inativa". */
 	
-	public static Integer findFreeIndex(ArrayList<Projectil> stateArray){
-		
+	public static Integer findFreeIndex(ArrayList<Enemy> stateArray){
 		Integer i = 0;
-		
-		for (Projectil a : stateArray) {	
-			if(a.getState().equals(Inactive.instancia)) break;
+		for (Enemy a : stateArray) {	
+			if(a.getStates().equals(Inactive.instancia())) break;
 			i++;
 		}
-		
 		return i;
-		
+	}
+	
+	public static Integer findFreeIndexProjectil(ArrayList<Projectil> stateArray){
+		Integer i = 0;
+		for (Projectil a : stateArray) {	
+			if(a.getState().equals(Inactive.instancia())) break;
+			i++;
+		}
+		return i;
 	}
 	
 
@@ -41,7 +56,7 @@ public class GameUtils {
 		
 		for(i = 0, k = 0; i < e.getProjetil().size() && k < amount; i++){
 			
-			if(e.getProjetil().get(i).equals(Inactive.instancia)) {
+			if(e.getProjetil().get(i).equals(Inactive.instancia())) {
 				freeArray.set(k, i);
 				k++;
 			}
@@ -58,53 +73,58 @@ public class GameUtils {
 		for (Projectil pro : pr) {
 			if(pro.getState().equals(Active.instancia())) {
 				
-				if(pro.getY() < 0) Inactive.setState(p);
+				if(pro.getY() < 0) GameUtils.INACTIVE.setState(p);
 				else {
 					pro.setX(pro.getX() + pro.getVeloX()*delta);
 					pro.setY(pro.getY() + pro.getVeloY()*delta);
 				}
 				
-				return result;
 			}
 		}
+		
+		if(result.size() > 0) return result;
 		
 		return null;
 		
 	}
 	
 	public static ArrayList<Enemy> checkProjectil(ArrayList<Enemy> p, double delta){
+
+		ArrayList<Enemy> finalEnemy = new ArrayList<Enemy>();
 		
 		for (Enemy e : p) {
-			
-			ArrayList<Projectil> pr = e.getProjetil();
+
 			ArrayList<Projectil> result = new ArrayList<Projectil>();
-			ArrayList<Enemy> finalEnemy = new ArrayList<Enemy>();
 			
-			for (Projectil pro : pr) {
+			for (Projectil pro : e.getProjetil()) {
 				if(pro.getState().equals(Active.instancia())) {
 					
-					if(pro.getY() > GameLib.HEIGHT) Inactive.setState(e);
+					if(pro.getY() > GameLib.HEIGHT) GameUtils.INACTIVE.setState(e);
 					else {
 						pro.setX(pro.getX() + pro.getVeloX()*delta);
 						pro.setY(pro.getY() + pro.getVeloY()*delta);
 					}
-					
-					e.setProjetil(result);
-					
 				}
+				result.add(pro);
 			}
-			
+
+			e.setProjetil(result);
 			finalEnemy.add(e);
 			
-			return finalEnemy;
 		}
+		
+		if(finalEnemy.size() > 0) return finalEnemy;
 		
 		return null;
 		
 	}
 	
 	public static void checkExplosion(Player p, long currentTime){
-		if(p.getExplosionEnd() < currentTime) Active.setState(p);
+		if(p.getExplosionEnd() < currentTime) GameUtils.INACTIVE.setState(p);
 		
+	}
+	
+	public static void busyWait(long time){
+		while(System.currentTimeMillis() < time) Thread.yield();
 	}
 }

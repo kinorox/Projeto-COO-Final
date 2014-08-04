@@ -1,90 +1,118 @@
 package std.ep.game.elements.actions;
 import java.util.ArrayList;
-import std.ep.game.elements.actions.states.*;
+import java.util.Iterator;
+import java.util.ListIterator;
+
+import std.ep.game.elements.actions.states.Active;
+import std.ep.game.elements.actions.states.Exploding;
+import std.ep.game.elements.actions.states.State;
 import std.ep.game.elements.enemy.Enemy;
 import std.ep.game.elements.player.Player;
-import std.ep.game.elements.projectil.*;
+import std.ep.game.elements.projectil.Projectil;
+import std.ep.game.utils.GameUtils;
 
 public class ColideActions 
 {
-
-	private State EXPLODING = new Exploding();
-	private State ACTIVE = new Active();
 	
-	public ArrayList<Enemy> enemyColisionWithPlayerProjectile(Player p, ArrayList<Enemy> e)
+	public ArrayList<Enemy> enemyColisionWithPlayerProjectile(Player p, ArrayList<Enemy> e, long currentTime)
 	{
 		
-		ArrayList<Enemy> er = new ArrayList<>(e.size());
-		
-		for(Enemy a : e)
-		{
-			if(a.getStates().equals(Active.instancia()))
-			{	
-				
-				for(Projectil pr : a.getProjetil()) {
-					double dx = a.getX() - pr.getX();
-					double dy = a.getY() - pr.getY();
-					double dist = Math.sqrt(dx * dx + dy * dy);
-					
-					if(dist < a.getRadius())
-					{	
-						Exploding.setState(a);
-						a.setExplosionStart(p.getNextShot());
-						a.setExplosionEnd(p.getNextShot() + 500);
-						
-						er.add(a);
-					}
-				}
-				
-			}
-		}
-		
-		return er;
-	}
-	
-	public Player playerEnemyCollision(Player p, ArrayList<Enemy> e) //DEVE RETORNAR UM OBJETO P?
-	{
-		for(Enemy a : e)
-		{
-			double dx = a.getX() - p.getX();
-			double dy = a.getY() - p.getY();
-			double dist = Math.sqrt(dx * dx + dy * dy);
+		try {
+			ListIterator<Projectil> litProj = p.getProjetil().listIterator();
+			ListIterator<Enemy> litEnemy = e.listIterator();
 			
-			if(dist < (p.getRadius() + a.getRadius()) * 0.8)
-			{	
-				Exploding.setState(p);
-				p.setExplosionStart(p.getNextShot());
-				p.setExplosionEnd(p.getNextShot() + 2000);
+			while(litProj.hasNext()){
+				Projectil pr = (Projectil) litProj.next();
 				
-				return p;
-			}
-		}
-		
-		return null;
-	}
-	
-	public Player playerColisionWithEnemyProjectile(Player p, ArrayList<Enemy> e)
-	{
-		if(p.getState().equals(Active.instancia()))
-		{		
-			for(Enemy a : e)
-			{
-				for(Projectil pr : a.getProjetil()) {
-					double dx 	= pr.getX() - p.getX();
-					double dy 	= pr.getY() - p.getY();
-					double dist = Math.sqrt(dx * dx + dy * dy);
+				while(litEnemy.hasNext()){
+					Enemy en = (Enemy) litEnemy.next();
 					
-					if(dist < (p.getRadius() + pr.getRadius()) * 0.8)
-					{		
-						Exploding.setState(p);
-						p.setExplosionStart(p.getNextShot()); //NextShot armazena o valor de currentTime
-						p.setExplosionEnd(p.getNextShot() + 2000);
+					if(en.getStates().equals(GameUtils.ACTIVE.instancia())){
+						Double dx = en.getX() - pr.getX();
+						Double dy = en.getY() - pr.getY();
+						Double dist = Math.sqrt(dx * dx + dy * dy);
+						
+						if(dist < en.getRadius()) {
+							GameUtils.EXPLODING.setState(en);
+							en.setExplosionStart(currentTime);
+							en.setExplosionEnd(currentTime + 500);
+						}
 					}
+					
+					litEnemy.set(en);
 				}
 				
 			}
+
+			return e;
+			
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			throw e1;
 		}
 		
-		return null;
+	}
+	
+	public Player playerEnemyCollision(Player p, ArrayList<Enemy> e)
+	{
+		
+		try {
+			ListIterator<Enemy> litEn = e.listIterator();
+			
+			while(litEn.hasNext()){
+				Enemy en = (Enemy) litEn.next();
+				
+				Double dx = en.getX() - p.getX();
+				Double dy = en.getY() - p.getY();
+				Double dist = Math.sqrt(dx * dx + dy * dy);
+				
+				if(dist < (p.getRadius() + en.getRadius()) * 0.8){
+					GameUtils.EXPLODING.setState(p);
+					p.setExplosionStart(p.getNextShot());
+					p.setExplosionEnd(p.getNextShot() + 2000);
+				}
+			}
+			
+			return p;
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			throw e1;
+		}
+		
+		
+	}
+	
+	public Player playerColisionWithEnemyProjectile(Player p, ArrayList<Enemy> e, long currentTime)
+	{
+		
+		try {
+			ListIterator<Enemy> litEn = e.listIterator();
+			
+			while(litEn.hasNext()){
+				Enemy en = (Enemy) litEn.next();
+				ListIterator<Projectil> litProj = en.getProjetil().listIterator();
+				
+				while(litProj.hasNext()){
+					Projectil pr = (Projectil) litProj.next();
+					
+					Double dx = pr.getX() - p.getX();
+					Double dy = pr.getY() - p.getY();
+					Double dist = Math.sqrt(dx * dx + dy * dy);
+					
+					if(dist < (p.getRadius() + pr.getRadius()) * 0.8){
+						GameUtils.EXPLODING.setState(p);
+						p.setExplosionStart(currentTime);
+						p.setExplosionEnd(currentTime + 2000);
+					}
+				}
+			}
+			
+			return p;
+			
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			throw e1;
+		}
+		
 	}
 }

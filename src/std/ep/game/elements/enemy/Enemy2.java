@@ -1,5 +1,7 @@
 package std.ep.game.elements.enemy;
 
+import std.ep.game.lib.GameLib;
+
 public class Enemy2 extends Enemy 
 {
 	double spawnX;			// coordenada x do próximo inimigo tipo 2 a aparecer
@@ -10,6 +12,7 @@ public class Enemy2 extends Enemy
 	{
 		super();
 		this.nextEnemy2 = nextEnemy2 + 7000;
+		this.spawnX = GameLib.WIDTH * 0.20;
 	}
 	
 	public void setSpawnX(double s) 

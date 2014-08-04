@@ -5,10 +5,7 @@ import std.ep.game.elements.player.Player;
 import std.ep.game.elements.projectil.Projectil;
 
 public interface State {
-	public static void setState(Player p) {
-	}
-	public static void setState(Enemy e) {
-	}
-	public static void setState(Projectil pr) {
-	}
+	public void setState(Player p);
+	public void setState(Enemy e);
+	public void setState(Projectil pr);
 }

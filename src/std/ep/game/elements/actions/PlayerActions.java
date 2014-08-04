@@ -3,6 +3,7 @@ package std.ep.game.elements.actions;
 import java.util.ArrayList;
 
 import std.ep.game.elements.actions.states.Active;
+import std.ep.game.elements.facade.ElementsFacade;
 import std.ep.game.elements.player.Player;
 import std.ep.game.elements.projectil.Projectil;
 import std.ep.game.lib.GameLib;
@@ -10,37 +11,47 @@ import std.ep.game.utils.GameUtils;
 
 public class PlayerActions {
 	
-	public static Player checkWhatTheUserIsPressing(Player p, double delta, long currentTime){
-
-		if(p.getState().equals(Active.instancia())){
+	public static boolean keyPressVerifier(boolean running, long delta,
+			long currentTime, ElementsFacade elements) {
+		
+		if(GameLib.iskeyPressed(GameLib.KEY_UP)){
+			elements.getP().setY(elements.getP().getY() - delta * elements.getP().getVeloY());
+		}
+		if(GameLib.iskeyPressed(GameLib.KEY_DOWN)){
+			elements.getP().setY(elements.getP().getY() + delta * elements.getP().getVeloY());
+		}
+		if(GameLib.iskeyPressed(GameLib.KEY_LEFT)){
+			elements.getP().setX(elements.getP().getX() - delta * elements.getP().getVeloX());
+		}
+		if(GameLib.iskeyPressed(GameLib.KEY_RIGHT)){ 
+			elements.getP().setX(elements.getP().getX() + delta * elements.getP().getVeloX());
+		}
+		if(GameLib.iskeyPressed(GameLib.KEY_CONTROL)) {
 			
-			if(GameLib.iskeyPressed(GameLib.KEY_UP)) p.setY(p.getY() - delta * p.getVeloY());
-			if(GameLib.iskeyPressed(GameLib.KEY_DOWN)) p.setY(p.getY() + delta * p.getVeloY());
-			if(GameLib.iskeyPressed(GameLib.KEY_LEFT)) p.setX(p.getX() - delta * p.getVeloX());
-			if(GameLib.iskeyPressed(GameLib.KEY_RIGHT)) p.setX(p.getX() + delta * p.getVeloX());
-			if(GameLib.iskeyPressed(GameLib.KEY_CONTROL)) {
+			if(currentTime > elements.getP().getNextShot()){
 				
-				if(currentTime > p.getNextShot()){
+				int free = GameUtils.findFreeIndexProjectil(elements.getP().getProjetil());
+										
+				if(free < elements.getP().getProjetil().size()){
 					
-					int free = GameUtils.findFreeIndex(p.getProjetil());
-											
-					if(free < p.getProjetil().size()){
-						
-						Projectil pr = p.getProjetil().get(free);
-						pr.setX(p.getX());
-						pr.setY(p.getY() - 2 * p.getRadius());
-						pr.setVeloX(0.0);
-						pr.setVeloY(-1.0);
-						Active.setState(pr);
-						p.setNextShot(currentTime + 100);
-						
-						p.getProjetil().set(free, pr);
-					}
-				}	
-			}
+					Projectil pr = elements.getP().getProjetil().get(free);
+					pr.setX(elements.getP().getX());
+					pr.setY(elements.getP().getY() - 2 * elements.getP().getRadius());
+					pr.setVeloX(0.0);
+					pr.setVeloY(-1.0);
+					GameUtils.ACTIVE.setState(pr);
+					elements.getP().setNextShot(currentTime + 100);
+					
+					elements.getP().getProjetil().set(free, pr);
+				}
+			}	
 		}
 		
-		return p;
+		if(GameLib.iskeyPressed(GameLib.KEY_ESCAPE)) {
+			running = false;
+		}
+		
+		return running;
 	}
 	
 	public static Player checkPlayerInTheWindow(Player p) {

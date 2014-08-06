@@ -76,7 +76,7 @@ public class ElementsFacade {
 			
 			for(int i = 0; i<=10; i++) {
 				Projectil pro = new Projectil(Inactive.instancia(), 0, 0, 0, 0, 0);
-				GameUtils.ACTIVE.setState(pro);
+				GameUtils.INACTIVE.setState(pro);
 				pr.add(pro);
 			}
 			

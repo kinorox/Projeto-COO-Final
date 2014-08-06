@@ -2,6 +2,7 @@ package std.ep.game.graphics;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 import std.ep.game.elements.actions.states.Active;
 import std.ep.game.elements.actions.states.Exploding;
@@ -55,10 +56,13 @@ public class Window {
 	
 	public static void enemy1Draw(ArrayList<Enemy> enemy, long currentTime){
 		
-		for(Enemy e : enemy){
+		ListIterator<Enemy> listEn = enemy.listIterator();
+		
+		while(listEn.hasNext()) {
+			Enemy e = listEn.next();
 			
 			if(e.getStates().equals(Exploding.instancia())){
-				Double alpha = (currentTime - e.getExplosionStart() / e.getExplosionEnd() - e.getExplosionStart());
+				Double alpha = (currentTime - e.getExplosionStart()) / (e.getExplosionEnd() - e.getExplosionStart());
 				GameLib.drawExplosion(e.getX(), e.getY(), alpha);
 			}
 			
@@ -71,18 +75,20 @@ public class Window {
 	
 	public static void enemy2Draw(ArrayList<Enemy> enemy, long currentTime){
 		
-		for(Enemy e : enemy){
+		ListIterator<Enemy> listEn = enemy.listIterator();
+		
+		while(listEn.hasNext()) {
+			Enemy e = listEn.next();
 			
 			if(e.getStates().equals(Exploding.instancia())){
-				Double alpha = (currentTime - e.getExplosionStart() / e.getExplosionEnd() - e.getExplosionStart());
+				Double alpha = (currentTime - e.getExplosionStart()) / (e.getExplosionEnd() - e.getExplosionStart());
 				GameLib.drawExplosion(e.getX(), e.getY(), alpha);
 			}
 			
 			if(e.getStates().equals(Active.instancia())){
 				GameLib.setColor(Color.MAGENTA);
-				GameLib.drawDiamond(e.getX(), e.getY(), e.getRadius());
+				GameLib.drawCircle(e.getX(), e.getY(), e.getRadius());
 			}
-			
 		}
 	}
 	

@@ -1,6 +1,7 @@
 package std.ep.game.elements.actions;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 import std.ep.game.elements.actions.states.Active;
 import std.ep.game.elements.actions.states.Exploding;
@@ -65,100 +66,106 @@ public class EnemyActions {
 	
 	public static ArrayList<Enemy> checkEnemy2State(Player p, ArrayList<Enemy> eArray, long currentTime, double delta) {
 		
-		ArrayList<Enemy> result = new ArrayList<Enemy>();
-		
-		for(Enemy e : eArray ) {
-			if(e.getStates().equals(Exploding.instancia())){
-				if(currentTime > e.getExplosionEnd()){
-					GameUtils.INACTIVE.setState(e);
-				}
-			}
+		try {
+			ListIterator<Enemy> litrEnemy = eArray.listIterator();
 			
-			if(e.getStates().equals(Active.instancia())){
+			while(litrEnemy.hasNext()){
+				Enemy e = litrEnemy.next();
 				
-				if(e.getY() > GameLib.HEIGHT + 10) GameUtils.INACTIVE.setState(e);
-				else {
-					
-					boolean shootNow = false;
-					double previousY = e.getY();
-					
-					e.setX(e.getX() + e.getVelocidade() * Math.cos(e.getAngle()) * delta);
-					e.setY(e.getY() + e.getVelocidade() * Math.sin(e.getAngle()) * delta * (-1.0));
-					e.setAngle(e.getAngle() + e.getRv() * delta);
-					
-					double threshold = GameLib.HEIGHT * 0.30;
-					
-					if(previousY < threshold && e.getY() >= threshold) {
-						
-						if(e.getX() < GameLib.WIDTH / 2) e.setRv(0.003);
-						else e.setRv(-0.003);
+				if(e.getStates().equals(Exploding.instancia())){
+					if(currentTime > e.getExplosionEnd()) e.setStates(GameUtils.INACTIVE);
+				}
 				
-					}
-					
-					if(e.getRv() > 0 && Math.abs(e.getAngle() - 3 * Math.PI) < 0.05){
-						e.setRv(0.0);
-						e.setAngle(3*Math.PI);
-						shootNow = true;
-					}
-					
-					if(e.getRv() < 0 && Math.abs(e.getAngle()) < 0.05){
-						e.setRv(0.0);
-						e.setAngle(0.0);
-						shootNow = true;
-					}
-					
-					if(shootNow){
-						ArrayList<Double> angles = new ArrayList<Double>();
-						angles.add(Math.PI/2 + Math.PI/8);
-						angles.add(Math.PI/2);
-						angles.add(Math.PI/2 - Math.PI/8);
+				if(e.getStates().equals(Active.instancia())){
+					if(e.getX() < -10 || e.getX() > GameLib.WIDTH + 10 ) e.setStates(GameUtils.INACTIVE);
+					else{
 						
-						ArrayList<Integer> freeArray = GameUtils.findFreeIndex(e, angles.size());
+						boolean shootNow = false;
+						Double prevY = e.getY();
 						
-						for (int k = 0; k < freeArray.size(); k++){
-							int free = freeArray.get(k);
+						e.setX(e.getX() + e.getVelocidade() * Math.cos(e.getAngle()) * delta);
+						e.setY(e.getY() + e.getVelocidade() * Math.sin(e.getAngle()) * delta * (-1.0));
+						e.setAngle(e.getAngle() + e.getRv() * delta);
+						
+						Double threshold = GameLib.HEIGHT * 0.30;
+						
+						if(prevY < threshold && e.getY() >= threshold) {
+							if(e.getX() < GameLib.WIDTH / 2) e.setRv(0.003);
+							else e.setRv(-0.003);
+						}
+						
+						if(e.getRv() > 0 && Math.abs(e.getAngle() - 3 * Math.PI) < 0.05){
+							e.setRv(0.0);
+							e.setAngle(3*Math.PI);
+							shootNow = true;
+						}
+						
+						if(e.getRv() < 0 && Math.abs(e.getAngle()) < 0.05){
+							e.setRv(0.0);
+							e.setAngle(0.0);
+							shootNow = true;
+						}
+						
+						if(shootNow){
+							ArrayList<Double> angles = new ArrayList<Double>();
 							
-							if(free < e.getProjetil().size()){
+							angles.add(Math.PI/2 + Math.PI/8);
+							angles.add(Math.PI/2);
+							angles.add(Math.PI/2 - Math.PI/8);
+							
+							ArrayList<Integer> freeArray = GameUtils.findFreeIndex(e, angles.size());
+							
+							for (int k = 0; k < freeArray.size(); k++){
 								
-								Double a = angles.get(k) + Math.random() * Math.PI/6 - Math.PI/12;
-								Double vx = Math.cos(a);
-								Double vy = Math.sin(a);
+								int free = freeArray.get(k);
 								
-								e.getProjetil().get(free).setX(e.getX());
-								e.getProjetil().get(free).setY(e.getY());
-								e.getProjetil().get(free).setVeloX(vx * 0.30);
-								e.getProjetil().get(free).setVeloY(vy * 0.30);
-								GameUtils.ACTIVE.setState(e.getProjetil().get(free));
-								
+								if(free < e.getProjetil().size()){
+									
+									Double a = angles.get(k) + Math.random() * Math.PI/6 - Math.PI/12;
+									Double vx = Math.cos(a);
+									Double vy = Math.sin(a);
+									
+									e.getProjetil().get(free).setX(e.getX());
+									e.getProjetil().get(free).setY(e.getY());
+									e.getProjetil().get(free).setVeloX(vx * 0.30);
+									e.getProjetil().get(free).setVeloY(vy * 0.30);
+									GameUtils.ACTIVE.setState(e.getProjetil().get(free));
+									
+								}
 							}
 						}
 					}
 				}
-
 			}
 			
-			result.add(e);
+			return eArray;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
 		}
-		
-		return result;
 	}
 	
 	public static ArrayList<Enemy> checkIfItsTimeToBornBaby1(long currentTime, ArrayList<Enemy> e){
 		
-		Enemy1 e1 = (Enemy1) e.get(0);
+		ListIterator<Enemy> litrEn = e.listIterator();
 		
-		if(currentTime > e1.getNextEnemy()){
-			Integer free = GameUtils.findFreeIndex(e);
+		while(litrEn.hasNext()){
+			Enemy e1 = litrEn.next();
 			
-			if(free < e.size()){
-				e.get(free).setX(Math.random() * (GameLib.WIDTH - 20.0) + 10.0);
-				e.get(free).setY(-10.0);
-				e.get(free).setVelocidade(0.20 + Math.random() * 0.15);
-				e.get(free).setAngle(3*Math.PI/2);
-				e.get(free).setRv(0.0);
-				GameUtils.ACTIVE.setState(e.get(free));
-				((Enemy1) e.get(free)).setNextShoot(currentTime + 500);
-				((Enemy1) e.get(free)).setNextEnemy(currentTime + 500);
+			if(currentTime > ((Enemy1) e1).getNextEnemy()){
+				Integer free = GameUtils.findFreeIndex(e);
+				
+				if(free < e.size()){
+					e.get(free).setX(Math.random() * (GameLib.WIDTH - 20.0) + 10.0);
+					e.get(free).setY(-10.0);
+					e.get(free).setVelocidade(0.20 + Math.random() * 0.15);
+					e.get(free).setAngle(3*Math.PI/2);
+					e.get(free).setRv(0.0);
+					GameUtils.ACTIVE.setState(e.get(free));
+					((Enemy1) e.get(free)).setNextShoot(currentTime + 500);
+					((Enemy1) e.get(free)).setNextEnemy(currentTime + 500);
+				}
 			}
 		}
 		

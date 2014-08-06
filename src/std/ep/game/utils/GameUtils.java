@@ -1,6 +1,7 @@
 package std.ep.game.utils;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 import std.ep.game.elements.actions.states.*;
 import std.ep.game.elements.enemy.Enemy;
@@ -25,10 +26,15 @@ public class GameUtils {
 	
 	public static Integer findFreeIndex(ArrayList<Enemy> stateArray){
 		Integer i = 0;
-		for (Enemy a : stateArray) {	
-			if(a.getStates().equals(Inactive.instancia())) break;
+		
+		ListIterator<Enemy> listEn = stateArray.listIterator();
+		
+		while(listEn.hasNext()){
+			Enemy e = listEn.next();
+			if(e.getStates().equals(Inactive.instancia())) break;
 			i++;
 		}
+		
 		return i;
 	}
 	
@@ -49,42 +55,49 @@ public class GameUtils {
 	public static ArrayList<Integer> findFreeIndex(Enemy e, int amount){
 
 		Integer i, k;
+		ArrayList<Projectil> pr = e.getProjetil();
 		ArrayList<Integer> freeArray =  new ArrayList<Integer>();
-		freeArray.add(e.getProjetil().size());
-		freeArray.add(e.getProjetil().size());
-		freeArray.add(e.getProjetil().size());
 		
-		for(i = 0, k = 0; i < e.getProjetil().size() && k < amount; i++){
+		freeArray.add(pr.size());
+		freeArray.add(pr.size());
+		freeArray.add(pr.size());
+		
+		for(i = 0, k = 0; i < pr.size() && k < amount; i++){
 			
-			if(e.getProjetil().get(i).equals(Inactive.instancia())) {
+			if(pr.get(i).getState().equals(Inactive.instancia())){
 				freeArray.set(k, i);
 				k++;
 			}
-			
 		}
 		
 		return freeArray;
 	}
 	
 	public static ArrayList<Projectil> checkProjectil(Player p, double delta){
-		ArrayList<Projectil> pr = p.getProjetil();
-		ArrayList<Projectil> result = new ArrayList<Projectil>();
 		
-		for (Projectil pro : pr) {
-			if(pro.getState().equals(Active.instancia())) {
+		try {
+			ArrayList<Projectil> projectilArray = p.getProjetil();
+			ListIterator<Projectil> litProj = projectilArray.listIterator();
+			
+			while(litProj.hasNext()){
+				Projectil pro = (Projectil) litProj.next();
 				
-				if(pro.getY() < 0) GameUtils.INACTIVE.setState(p);
-				else {
-					pro.setX(pro.getX() + pro.getVeloX()*delta);
-					pro.setY(pro.getY() + pro.getVeloY()*delta);
+				if(pro.getState().equals(Active.instancia())){
+					
+					if(pro.getY() < 0) GameUtils.INACTIVE.setState(pro);
+					else
+						pro.setX(pro.getX() + pro.getVeloX() * delta);
+						pro.setY(pro.getY() + pro.getVeloY() * delta);
+					
 				}
 				
+				litProj.set(pro);
 			}
+			
+			return projectilArray;
+		} catch (Exception e) {
+			throw e;
 		}
-		
-		if(result.size() > 0) return result;
-		
-		return null;
 		
 	}
 	
